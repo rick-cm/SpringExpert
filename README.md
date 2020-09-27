@@ -1,5 +1,11 @@
 # SpringExpert
-Projeto desenvolvido no curso Spring Boot Expert do professor Dougllas Sousa na Udemy,
+Projeto de uma API Restful desenvolvido no curso Spring Boot Expert do professor Dougllas Sousa na Udemy.
+
+## Funcionalidades utilizadas
+- Spring Data
+- Padrão DTO
+- Controller Advice
+- Bean Validation
 
 ## Tecnologias Utilizadas
 ### Lombok
