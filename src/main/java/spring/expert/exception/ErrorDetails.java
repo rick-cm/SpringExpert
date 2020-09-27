@@ -1,10 +1,13 @@
 package spring.expert.exception;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ErrorDetails {
 
     private String title;
@@ -12,8 +15,4 @@ public class ErrorDetails {
     private String detail;
     private long timestamp;
     private String developerMessage;
-
-    public String getTitle() {
-        return title;
-    }
 }
