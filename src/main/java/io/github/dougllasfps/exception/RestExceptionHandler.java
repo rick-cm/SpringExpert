@@ -15,14 +15,14 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(ResponseStatusException.class)
-    public ResponseEntity<?> responseStatusException (ResponseStatusException rse){
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<?> resourceNotFoundException (ResourceNotFoundException rnfe) {
         ErrorDetails errorDetails = ErrorDetails.builder()
                 .timestamp(new Date().getTime())
-                .status(rse.getStatus().value())
-                .title(rse.getStatus().getReasonPhrase())
-                .detail(rse.getMessage())
-                .developerMessage(rse.getClass().getName())
+                .status(HttpStatus.NOT_FOUND.value())
+                .title("Resource not found")
+                .detail(rnfe.getMessage())
+                .developerMessage(rnfe.getClass().getName())
                 .build();
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }

@@ -2,6 +2,7 @@ package io.github.dougllasfps.rest.controller;
 
 import io.github.dougllasfps.domain.entity.Cliente;
 import io.github.dougllasfps.domain.repository.Clientes;
+import io.github.dougllasfps.exception.ResourceNotFoundException;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
@@ -26,9 +27,7 @@ public class ClienteController {
         return clientesRepo
                 .findById(id)
                 .orElseThrow(() ->
-                        //new ResourceNotFoundException(
-                          //      "Cliente não encontrado"));
-                        new ResponseStatusException(HttpStatus.NOT_FOUND,
+                                new ResourceNotFoundException(
                                 "Cliente não encontrado") );
 
     }
@@ -47,7 +46,7 @@ public class ClienteController {
                     clientesRepo.delete(cliente );
                     return cliente;
                 })
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                .orElseThrow(() -> new ResourceNotFoundException(
                         "Cliente não encontrado") );
 
     }
@@ -62,7 +61,7 @@ public class ClienteController {
                     cliente.setId(clienteExistente.getId());
                     clientesRepo.save(cliente);
                     return clienteExistente;
-                }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                }).orElseThrow(() -> new ResourceNotFoundException(
                     "Cliente não encontrado") );
     }
 

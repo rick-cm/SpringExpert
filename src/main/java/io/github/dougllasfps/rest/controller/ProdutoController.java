@@ -3,6 +3,7 @@ package io.github.dougllasfps.rest.controller;
 import io.github.dougllasfps.domain.entity.Cliente;
 import io.github.dougllasfps.domain.entity.Produto;
 import io.github.dougllasfps.domain.repository.Produtos;
+import io.github.dougllasfps.exception.ResourceNotFoundException;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
@@ -41,7 +42,7 @@ public class ProdutoController {
                    repository.save(produto);
                    return produto;
                 }).orElseThrow( () ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND,
+                new ResourceNotFoundException(
                         "Produto não encontrado."));
     }
 
@@ -54,7 +55,7 @@ public class ProdutoController {
                     repository.delete(p);
                     return Void.TYPE;
                 }).orElseThrow( () ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND,
+                new ResourceNotFoundException(
                         "Produto não encontrado."));
     }
 
@@ -63,7 +64,7 @@ public class ProdutoController {
         return repository
                 .findById(id)
                 .orElseThrow( () ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND,
+                new ResourceNotFoundException(
                         "Produto não encontrado."));
     }
 

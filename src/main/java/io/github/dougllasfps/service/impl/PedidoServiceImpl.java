@@ -9,14 +9,14 @@ import io.github.dougllasfps.domain.repository.Clientes;
 import io.github.dougllasfps.domain.repository.ItemsPedido;
 import io.github.dougllasfps.domain.repository.Pedidos;
 import io.github.dougllasfps.domain.repository.Produtos;
-import io.github.dougllasfps.exception.PedidoNaoEncontradoException;
-import io.github.dougllasfps.exception.RegraNegocioException;
 import io.github.dougllasfps.rest.dto.ItemPedidoDTO;
 import io.github.dougllasfps.rest.dto.PedidoDTO;
 import io.github.dougllasfps.service.PedidoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -38,7 +38,7 @@ public class PedidoServiceImpl implements PedidoService {
         Integer idCliente = dto.getCliente();
         Cliente cliente = clientesRepository
                 .findById(idCliente)
-                .orElseThrow(() -> new RegraNegocioException("Código de cliente inválido."));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Código de cliente inválido."));
 
         Pedido pedido = new Pedido();
         pedido.setTotal(dto.getTotal());
@@ -66,12 +66,12 @@ public class PedidoServiceImpl implements PedidoService {
                 .map( pedido -> {
                     pedido.setStatus(statusPedido);
                     return repository.save(pedido);
-                }).orElseThrow(() -> new PedidoNaoEncontradoException() );
+                }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pedido não encontrado."));
     }
 
     private List<ItemPedido> converterItems(Pedido pedido, List<ItemPedidoDTO> items){
         if(items.isEmpty()){
-            throw new RegraNegocioException("Não é possível realizar um pedido sem items.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Não é possível realizar um pedido sem items.");
         }
 
         return items
@@ -81,9 +81,9 @@ public class PedidoServiceImpl implements PedidoService {
                     Produto produto = produtosRepository
                             .findById(idProduto)
                             .orElseThrow(
-                                    () -> new RegraNegocioException(
-                                            "Código de produto inválido: "+ idProduto
-                                    ));
+                                    () ->   new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                                            "Código de produto inválido: "+ idProduto)
+                            );
 
                     ItemPedido itemPedido = new ItemPedido();
                     itemPedido.setQuantidade(dto.getQuantidade());
