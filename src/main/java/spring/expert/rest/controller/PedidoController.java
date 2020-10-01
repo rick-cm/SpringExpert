@@ -1,22 +1,17 @@
 package spring.expert.rest.controller;
 
-import spring.expert.domain.entity.ItemPedido;
+import org.springframework.beans.factory.annotation.Autowired;
 import spring.expert.domain.entity.Pedido;
 import spring.expert.domain.enums.StatusPedido;
 import spring.expert.rest.dto.AtualizacaoStatusPedidoDTO;
-import spring.expert.rest.dto.InformacaoItemPedidoDTO;
 import spring.expert.rest.dto.InformacoesPedidoDTO;
 import spring.expert.rest.dto.PedidoDTO;
+import spring.expert.rest.mapper.PedidoMapper;
 import spring.expert.service.PedidoService;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
-import java.time.format.DateTimeFormatter;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -25,6 +20,9 @@ import static org.springframework.http.HttpStatus.*;
 public class PedidoController {
 
     private PedidoService service;
+
+    @Autowired
+    private PedidoMapper pedidoMapper;
 
     public PedidoController(PedidoService service) {
         this.service = service;
@@ -41,7 +39,7 @@ public class PedidoController {
     public InformacoesPedidoDTO getById(@PathVariable Integer id ){
         return service
                 .obterPedidoCompleto(id)
-                .map( p -> converter(p) )
+                .map( p -> pedidoMapper.entityToDTO(p) )
                 .orElseThrow(() ->
                         new ResponseStatusException(NOT_FOUND, "Pedido não encontrado."));
     }
@@ -54,29 +52,40 @@ public class PedidoController {
         service.atualizaStatus(id, StatusPedido.valueOf(novoStatus));
     }
 
-    private InformacoesPedidoDTO converter(Pedido pedido){
-        return InformacoesPedidoDTO
-                .builder()
-                .codigo(pedido.getId())
-                .dataPedido(pedido.getDataPedido().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
-                .cpf(pedido.getCliente().getCpf())
-                .nomeCliente(pedido.getCliente().getNome())
-                .total(pedido.getTotal())
-                .status(pedido.getStatus().name())
-                .items(converter(pedido.getItens()))
-                .build();
-    }
+//    private InformacoesPedidoDTO converter(Pedido pedido){
+//        return InformacoesPedidoDTO
+//                .builder()
+//                .codigo(pedido.getId())
+//                .dataPedido(pedido.getDataPedido().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
+//                .cpf(pedido.getCliente().getCpf())
+//                .nomeCliente(pedido.getCliente().getNome())
+//                .total(pedido.getTotal())
+//                .status(pedido.getStatus().name())
+//                .items(converter(pedido.getItens()))
+//                .build();
+//    }
 
-    private List<InformacaoItemPedidoDTO> converter(List<ItemPedido> itens){
-        if(CollectionUtils.isEmpty(itens)){
-            return Collections.emptyList();
-        }
-        return itens.stream().map(
-                item -> InformacaoItemPedidoDTO
-                            .builder().descricaoProduto(item.getProduto().getDescricao())
-                            .precoUnitario(item.getProduto().getPreco())
-                            .quantidade(item.getQuantidade())
-                            .build()
-        ).collect(Collectors.toList());
-    }
+//    @Named("itensPedidoConverter")
+//    public List<InformacaoItemPedidoDTO> converter(List<ItemPedido> itens){
+//
+//        if(CollectionUtils.isEmpty(itens)){
+//            return Collections.emptyList();
+//        }
+//        return itens.stream().map(
+//                item -> informacoesItemPedidoMapper.entityToDTO(item)
+//        ).collect(Collectors.toList());
+//    }
+
+//    private List<InformacaoItemPedidoDTO> converter(List<ItemPedido> itens){
+//        if(CollectionUtils.isEmpty(itens)){
+//            return Collections.emptyList();
+//        }
+//        return itens.stream().map(
+//                item -> InformacaoItemPedidoDTO
+//                            .builder().descricaoProduto(item.getProduto().getDescricao())
+//                            .precoUnitario(item.getProduto().getPreco())
+//                            .quantidade(item.getQuantidade())
+//                            .build()
+//        ).collect(Collectors.toList());
+//    }
 }

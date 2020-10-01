@@ -3,6 +3,7 @@ package spring.expert.exception;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -46,5 +47,17 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 .fieldMessage(fieldsMessage)
                 .build();
         return new ResponseEntity<>(veDetails, HttpStatus.BAD_REQUEST);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        CustomErrorDetails customErrorDetails = CustomErrorDetails.builder()
+                .timestamp(new Date().getTime())
+                .status(status.value())
+                .title("Resource not found")
+                .detail(ex.getMessage())
+                .developerMessage(ex.getClass().getName())
+                .build();
+        return new ResponseEntity<>(customErrorDetails, status);
     }
 }
