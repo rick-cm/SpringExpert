@@ -9,6 +9,7 @@ import spring.expert.domain.repository.Clientes;
 import spring.expert.domain.repository.ItemsPedido;
 import spring.expert.domain.repository.Pedidos;
 import spring.expert.domain.repository.Produtos;
+import spring.expert.exception.ResourceNotFoundException;
 import spring.expert.rest.dto.ItemPedidoDTO;
 import spring.expert.rest.dto.PedidoDTO;
 import spring.expert.service.PedidoService;
@@ -66,7 +67,7 @@ public class PedidoServiceImpl implements PedidoService {
                 .map( pedido -> {
                     pedido.setStatus(statusPedido);
                     return repository.save(pedido);
-                }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pedido não encontrado."));
+                }).orElseThrow(() -> new ResourceNotFoundException("Pedido não encontrado."));
     }
 
     private List<ItemPedido> converterItems(Pedido pedido, List<ItemPedidoDTO> items){

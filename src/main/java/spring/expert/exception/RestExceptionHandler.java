@@ -8,6 +8,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.Date;
@@ -59,5 +60,17 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 .developerMessage(ex.getClass().getName())
                 .build();
         return new ResponseEntity<>(customErrorDetails, status);
+    }
+
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<?> responseStatusException (ResponseStatusException rse) {
+        ResourceNotFoundDetails resourceNotFoundDetails = ResourceNotFoundDetails.builder()
+                .timestamp(new Date().getTime())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .title("Resource not found")
+                .detail(rse.getMessage())
+                .developerMessage(rse.getClass().getName())
+                .build();
+        return new ResponseEntity<>(resourceNotFoundDetails, HttpStatus.BAD_REQUEST);
     }
 }
