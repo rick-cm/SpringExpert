@@ -16,7 +16,7 @@ Projeto de uma API Restful desenvolvido no curso Spring Boot Expert do professor
 [principal função no porjeto: gestão de dependecias]é uma ferramenta de automação de compilação utilizada primariamente em projetos Java.
 
 ### MapStruct
-[principal função no projeto:fazer o parser de classes]O MapStruct é um gerador de código que simplifica bastante a implementação de mapeamentos entre tipos de bean Java com base em uma abordagem de convenção sobre configuração.
+[principal função no projeto:fazer o parser de classes]Essa funcionalidade não está no projeto original, fiz a implementação para melhorar o projeto e aprendizado. O MapStruct é um gerador de código que simplifica bastante a implementação de mapeamentos entre tipos de bean Java com base em uma abordagem de convenção sobre configuração.
 
 ### Swagger
 É uma estrutura de software de código aberto apoiada por um grande ecossistema de ferramentas que ajuda os desenvolvedores a projetar, criar, documentar e consumir serviços da Web RESTful
