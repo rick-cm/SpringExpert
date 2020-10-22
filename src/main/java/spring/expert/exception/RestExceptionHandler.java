@@ -66,11 +66,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<?> responseStatusException (ResponseStatusException rse) {
         ResourceNotFoundDetails resourceNotFoundDetails = ResourceNotFoundDetails.builder()
                 .timestamp(new Date().getTime())
-                .status(HttpStatus.BAD_REQUEST.value())
-                .title("Resource not found")
+                .status(rse.getStatus().value())
+                .title(rse.getReason())
                 .detail(rse.getMessage())
                 .developerMessage(rse.getClass().getName())
                 .build();
-        return new ResponseEntity<>(resourceNotFoundDetails, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(resourceNotFoundDetails, rse.getStatus());
     }
 }
