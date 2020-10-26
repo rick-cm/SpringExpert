@@ -7,7 +7,7 @@ import spring.expert.rest.dto.UsuarioDTO;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2020-10-22T12:09:19-0300",
+    date = "2020-10-26T16:31:32-0300",
     comments = "version: 1.2.0.Final, compiler: javac, environment: Java 15 (Oracle Corporation)"
 )
 @Component
